@@ -1,0 +1,3 @@
+aiogram
+pydantic_settings
+redis

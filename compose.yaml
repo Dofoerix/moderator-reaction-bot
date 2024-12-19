@@ -2,5 +2,6 @@ services:
   bot:
     build:
       context: .
+    env_file: .env
     restart: unless-stopped
     stop_signal: SIGINT
