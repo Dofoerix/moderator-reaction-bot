@@ -19,7 +19,7 @@ async def username_msg(message: Message, redis: RedisClient):
     logging.info(f'Message {message.message_id} in chat {message.chat.id} has been added to the database')
 
 @router.message_reaction(F.chat.type.in_({'group', 'supergroup'}), ChatFilter(), UserReactionFilter())
-async def reaction(reaction: MessageReactionUpdated, bot: Bot, redis: RedisClient, username: str):
+async def reaction(reaction: MessageReactionUpdated, bot: Bot, redis: RedisClient):
     message_time = await redis.get_msg(reaction.message_id) - redis.prune_time
     reaction_time = reaction.date.timestamp()
     record_time = reaction_time - message_time
@@ -34,7 +34,7 @@ async def reaction(reaction: MessageReactionUpdated, bot: Bot, redis: RedisClien
 
     answer = form.Text(
         new_best,
-        form.TextLink('Модератор', url=f'https://t.me/{username}'),
+        form.TextLink('Модератор', url=f'https://t.me/{reaction.user.username}'),
         (
             f' справился за {format_time(record_time)}\n'
             'Чтобы просмотреть рекорды, используйте команду /records'
@@ -56,7 +56,7 @@ async def records(message: Message, redis: RedisClient, username: str):
             if message.chat.username:
                 chat_id = message.chat.username
             else:
-                chat_id = f'c/{str(message.chat.id).lstrip('-100')}'
+                chat_id = f'c/{str(message.chat.id).replace('-100', '')}'
             formatted_answer.append(
                 form.TextLink(f'{format_time(record[1])}', url=f'https://t.me/{chat_id}/{record[0]}')
             )
