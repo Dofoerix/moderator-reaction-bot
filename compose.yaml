@@ -1,7 +1,25 @@
 services:
   bot:
-    build:
-      context: .
+    build: .
     env_file: .env
     restart: unless-stopped
     stop_signal: SIGINT
+    depends_on:
+      redis:
+        condition: service_healthy
+
+  redis:
+    image: redis:7.4-alpine3.20
+    restart: unless-stopped
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 1m
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+      start_interval: 5s
+      
+volumes:
+  redis-data:
