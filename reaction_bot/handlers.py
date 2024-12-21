@@ -41,7 +41,12 @@ async def reaction(reaction: MessageReactionUpdated, bot: Bot, redis: RedisClien
         )
     )
 
-    await bot.send_message(reaction.chat.id, **answer.as_kwargs(), reply_to_message_id=reaction.message_id)
+    await bot.send_message(
+        reaction.chat.id,
+        **answer.as_kwargs(),
+        reply_to_message_id=reaction.message_id,
+        disable_notification=True
+    )
 
 @router.message(Command('records'))
 async def records(message: Message, redis: RedisClient, username: str):
