@@ -1,6 +1,6 @@
 # Moderator Reaction Telegram Bot
 
-Telegram bot that records the time it takes for a moderator to respond.
+A Telegram bot that records the time it takes for a moderator to respond.
 
 ## How Does it Work
 

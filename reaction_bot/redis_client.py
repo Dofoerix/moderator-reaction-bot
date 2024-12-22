@@ -1,5 +1,4 @@
 import logging
-import time
 from datetime import datetime
 
 from redis.asyncio import Redis
@@ -22,7 +21,7 @@ class RedisClient:
         """
         Remove expired message IDs from the sorted set.
         """
-        number = await self.client.zremrangebyscore('', '-inf', time.time())
+        number = await self.client.zremrangebyscore('', '-inf', datetime.now().timestamp())
         if number:
             logging.info(f'{number} messages have been pruned from the database')
 
